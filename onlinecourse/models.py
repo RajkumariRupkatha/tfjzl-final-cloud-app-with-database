@@ -30,6 +30,7 @@ class Learner(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
+
     STUDENT = 'student'
     DEVELOPER = 'developer'
     DATA_SCIENTIST = 'data_scientist'
@@ -51,8 +52,7 @@ class Learner(models.Model):
     social_link = models.URLField(max_length=200)
 
     def __str__(self):
-        return self.user.username + "," + \
-               self.occupation
+        return self.user.username + "," + self.occupation
 
 
 # Course model
@@ -82,14 +82,16 @@ class Course(models.Model):
 class Lesson(models.Model):
     title = models.CharField(max_length=200, default="title")
     order = models.IntegerField(default=0)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE
+    )
     content = models.TextField()
 
 
 # Enrollment model
-# <HINT> Once a user enrolled a class, an enrollment entry should be created
-# between the user and course.
-# We could use the enrollment to track information such as exam submissions.
+# Once a user enrolls in a course, an enrollment entry is created
+# between the user and the course.
 class Enrollment(models.Model):
     AUDIT = 'audit'
     HONOR = 'honor'
@@ -130,7 +132,7 @@ class Question(models.Model):
     def __str__(self):
         return "Question: " + self.content
 
-    # Method to calculate whether the learner gets the question's score
+    # Calculate whether the learner receives the question's score
     def is_get_score(self, selected_ids):
         all_answers = self.choice_set.filter(
             is_correct=True
@@ -157,9 +159,9 @@ class Choice(models.Model):
     is_correct = models.BooleanField(default=False)
 
 
-# One enrollment could have multiple submissions.
-# One submission could have multiple choices.
-# One choice could belong to multiple submissions.
+# One enrollment can have multiple submissions.
+# One submission can have multiple choices.
+# One choice can belong to multiple submissions.
 class Submission(models.Model):
     enrollment = models.ForeignKey(
         Enrollment,

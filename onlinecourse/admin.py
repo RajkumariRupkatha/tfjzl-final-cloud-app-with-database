@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-# Import all models used in the admin site
+# Import all seven models
 from .models import (
     Course,
     Lesson,
